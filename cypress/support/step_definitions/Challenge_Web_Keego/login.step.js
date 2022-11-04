@@ -1,6 +1,9 @@
 /// <reference types="cypress" />
 /* global Then, When, Given */
+const LoginPage = require('../../pages/login.page')
 
+
+// -----------------------------------------------------------------------------------------------------
 
 // Scenario: Login Success
 
@@ -9,66 +12,66 @@ Given('i am on main page', () => {
 })
 
 When('click on sign-in', () =>{
-    cy.get('.login').click()
+    LoginPage.clickSignInBtn()
 })
 
 And('input the correct user and password', () => {
-    cy.get('#email').type('teste2021@teste.com.br')
-    cy.get('#passwd').type('teste')
-        .get('#SubmitLogin > span').click()
+    LoginPage.sendInformationLogin()
 })
 
 
 Then('after submit the system must the login with success', () => {
-    cy.get('.account > span').should('have.text', 'asdfa afda')
+    LoginPage.validateUserLogged()
 })
+
+// -----------------------------------------------------------------------------------------------------
 
 // Scenario: Login with User Incorrect
 
 And('input the incorrect user', () => {
-    cy.get('#email').type('abcd@gmail.com')
-    cy.get('#passwd').type('teste')
-        .get('#SubmitLogin > span').click()
+    LoginPage.sendIncorrectUserLogin()
 })
 
 
 Then('after submit the system mustnt the login', () => {
-    cy.get('ol > li').should('have.text', 'Authentication failed.')
+    LoginPage.validateUserNotLogged()
 })
+
+// -----------------------------------------------------------------------------------------------------
 
 // Scenario: Login with Password Incorrect
 
 And('input the incorrect password', () => {
-    cy.get('#email').type('teste2021@teste.com.br')
-    cy.get('#passwd').type('efghi')
-        .get('#SubmitLogin > span').click()
+    LoginPage.sendIncorrectPasswdLogin()
 })
 
 
 Then('after submit the system mustnt the login', () => {
-    cy.get('ol > li').should('have.text', 'Authentication failed.')
+    LoginPage.validateUserNotLogged()
 })
+
+// -----------------------------------------------------------------------------------------------------
 
 // Scenario: Login without Password
 
 And('input the user only', () => {
-    cy.get('#email').type('teste2021@teste.com.br')
-        .get('#SubmitLogin > span').click()
+    LoginPage.sendEmailOnly()
 })
 
 
 Then('after submit the system must return password required', () => {
-    cy.get('ol > li').should('have.text', 'Password is required.')
+    LoginPage.validatePasswdRequired()
 })
+
+// ----------------------------------------------------------------------------------------------------
 
 // Login without User
 
 And('input the password only', () => {
-    cy.get('#passwd').type('efghi')
-        .get('#SubmitLogin > span').click()
+    LoginPage.sendPasswdOnly()
 })
 
 
 Then('after submit the system must return email required', () => {
-    cy.get('ol > li').should('have.text', 'An email address required.')
+    LoginPage.validateUserRequired()
 })
